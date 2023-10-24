@@ -54,11 +54,16 @@ pipeline{
                 script{
                     withDockerRegistry(credentialsId: 'dockerhub', toolName: 'docker') {
                         sh '''
-                        docker build -t 2048 .
-                        docker tag 2048:latest nelzone/2048:latest
-                        docker push nelzone/2048:latest '''
+                        sudo docker build -t 2048 .
+                        sudo docker tag 2048:latest nelzone/2048:latest
+                        sudo docker push nelzone/2048:latest '''
                     }
                 }
+            }
+        }
+        stage('Trivy Image Scan'){
+            steps{
+                sh "trivy image nelzone/2048:latest > trivy.txt" 
             }
         }
     }
