@@ -54,9 +54,10 @@ pipeline{
                 script{
                     withDockerRegistry(credentialsId: 'docker') {
                         sh '''
+                        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 855956050827.dkr.ecr.us-east-1.amazonaws.com
                         sudo docker build -t 2048 .
-                        sudo docker tag 2048:latest nelzone/2048:latest
-                        sudo docker push nelzone/2048:latest '''
+                        sudo docker tag 2048:latest 855956050827.dkr.ecr.us-east-1.amazonaws.com/2048:latest
+                        sudo docker push 855956050827.dkr.ecr.us-east-1.amazonaws.com/2048:latest '''
                     }
                 }
             }
