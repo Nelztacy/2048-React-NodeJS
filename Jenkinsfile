@@ -52,7 +52,7 @@ pipeline{
         stage('Docker Build $ Push'){
             steps{
                 script{
-                    withDockerRegistry(credentialsId: 'dockerhub', toolName: 'docker') {
+                    withDockerRegistry(credentialsId: 'docker') {
                         sh '''
                         sudo docker build -t 2048 .
                         sudo docker tag 2048:latest nelzone/2048:latest
