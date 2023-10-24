@@ -38,5 +38,28 @@ pipeline{
                 sh "npm install"
             }
         }
+        stage('OWASP FS SCAN') {
+            steps {
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DPC'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
+        stage('TRIVY FS SCAN') {
+            steps {
+                sh "trivy fs . > trivyfs.txt"
+            }
+        }
+        stage('Docker Build $ Push'){
+            steps{
+                script{
+                    withDockerRegistry(credentialsId: 'dockerhub', toolName: 'docker') {
+                        sh '''
+                        docker build -t 2048 .
+                        docker tag 2048:latest nelzone/2048:latest
+                        docker push nelzone/2048:latest '''
+                    }
+                }
+            }
+        }
     }
 }
