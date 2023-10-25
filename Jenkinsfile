@@ -57,12 +57,16 @@ pipeline{
             }
         }
         stage('Push image to DockerHub'){
-            steps{
-                script{
-		   withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub-pwd')]) {
-                   sh 'docker login -u nelzone -p ${dockerhub-pwd}'
-        }
-                   sh 'docker push nelzone/2048:latest'
+            steps {
+                script {
+                  def dockerImage = docker.build("2048:latest", ".")
+                  docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                      sh '''
+                      echo "$DOCKER_HUB_CREDENTIALS_PSW" | sudo docker login -u $dockerhub-pwd --password-stdin
+                      sudo docker tag 2048:latest nelzone/2048:latest
+                      sudo docker push nelzone/2048:latest
+                      '''
+                  }
                 }
             }
         }
