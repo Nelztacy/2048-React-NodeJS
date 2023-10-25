@@ -62,7 +62,7 @@ pipeline{
                   def dockerImage = docker.build("2048:latest", ".")
                   docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                       sh '''
-                      withCredentials([string(credentialsId: 'dockerhub', variable: '')]) {
+                      withCredentials([string(credentialsId: 'docker-token', variable: '')]) {
                       sudo docker tag 2048:latest nelzone/2048:latest
                       sudo docker push nelzone/2048:latest
                       '''
