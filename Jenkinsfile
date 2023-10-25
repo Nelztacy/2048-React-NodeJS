@@ -60,7 +60,7 @@ pipeline{
             steps{
                 script{
 		   withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub-pwd')]) {
-                   sh 'docker login -u nelzone -p ${dockerhubpwd}'
+                   sh 'docker login -u nelzone -p ${dockerhub-pwd}'
         }
                    sh 'docker push nelzone/2048:latest'
                 }
