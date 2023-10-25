@@ -49,18 +49,20 @@ pipeline{
                 sh "trivy fs . > trivyfs.txt"
             }
         }
-        stage('Docker Build $ Push'){
-            steps{
-                script{
-                    withDockerRegistry(credentialsId: 'dockerhub', toolName: 'docker') {
-                        sh '''
-                        sudo docker build -t 2048 .
-                        sudo docker tag 2048:latest nelzone/2048:latest
-                        sudo docker push nelzone/2048:latest '''
-                    }
-                }
+        stage('Docker Build & Push') {
+        steps {
+        script {
+            def dockerImage = docker.build("2048:latest", ".")
+            docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                sh '''
+                echo "$DOCKER_HUB_CREDENTIALS_PSW" | sudo docker login -u $DOCKER_CREDENTIAL --password-stdin
+                sudo docker tag 2048:latest nelzone/2048:latest
+                sudo docker push nelzone/2048:latest
+                '''
             }
         }
+    }
+}
         stage('Trivy Image Scan'){
             steps{
                 sh "trivy image nelzone/2048:latest > trivy.txt" 
