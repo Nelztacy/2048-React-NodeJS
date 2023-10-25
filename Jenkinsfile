@@ -63,6 +63,7 @@ pipeline{
                   docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                       sh '''
                       withCredentials([string(credentialsId: 'docker-token', variable: '')]) {
+                      withCredentials([string(credentialsId: 'dock-hub', variable: '')]) {
                       sudo docker tag 2048:latest nelzone/2048:latest
                       sudo docker push nelzone/2048:latest
                       '''
