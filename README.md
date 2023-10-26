@@ -4,7 +4,7 @@ This game (2048) was built using **React** and **TypeScript**. The unique part o
 
 **Wondering how was that built?** You can find a video tutorial on [my YouTube Channel](https://www.youtube.com/channel/UCJV16_5c4A0amyBZSI4yP6A)
 
-## Let me show you how To play this exciting game
+## Let me show you how To play dis' exciting game
 
 You can play 2048 on [Github pages](https://mateuszsokola.github.io/2048-in-react/)
 
