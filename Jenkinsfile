@@ -52,21 +52,17 @@ pipeline{
         stage('Build docker image'){
             steps{
                 script{
-                    sh 'docker build -t nelzone/2048:latest .'
+                    sh 'docker build -t nelzone/2048 .'
                 }
             }
         }
         stage('Push image to DockerHub'){
-            steps {
-                script {
-                  def dockerImage = docker.build("2048:latest", ".")
-                  docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                      sh '''
-                      withCredentials([string(credentialsId: 'dock-hub', variable: '')]) {
-                      sudo docker tag 2048:latest nelzone/2048:latest
-                      sudo docker push nelzone/2048:latest
-                      '''
-                  }
+            steps{
+                script{
+                   withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhub')]) {
+                   sh 'docker login -u nelzone -p ${dockerhub}'
+        }
+                   sh 'docker push nelzone/2048'
                 }
             }
         }
