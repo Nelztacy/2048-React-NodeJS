@@ -71,5 +71,10 @@ pipeline{
                 sh "trivy image nelzone/2048:latest > trivy.txt" 
             }
         }
+        stage('Deploy to container'){
+            steps{
+                sh 'docker run -d --name 2048 -p 3000:3000 nelzone/2048:latest'
+            }
+        }
     }
 }
