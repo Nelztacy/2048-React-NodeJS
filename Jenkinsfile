@@ -52,7 +52,7 @@ pipeline{
         stage('Build docker image'){
             steps{
                 script{
-                    sh 'docker build -t nelzone/2048 .'
+                    sh 'docker build -t nelzone/2048v2 .'
                 }
             }
         }
@@ -62,21 +62,21 @@ pipeline{
                    withCredentials([string(credentialsId: 'docker', variable: 'docker')]) {
                    sh 'docker login -u nelzone -p ${docker}'
         }
-                   sh 'docker push nelzone/2048'
+                   sh 'docker push nelzone/2048v2'
                 }
             }
         }
         stage('Trivy Image Scan'){
             steps{
-                sh "trivy image nelzone/2048:latest > trivy.txt" 
+                sh "trivy image nelzone/2048:v2 > trivy.txt" 
             }
         }
         stage('Deploy to container'){
             steps{
-                sh 'docker run -d --name 2048 -p 3000:3000 nelzone/2048:latest'
+                sh 'docker run -d --name 2048v2 -p 3000:3000 nelzone/2048:latest2'
             }
         }
-        stage('Deploy to kubernets'){
+        stage('Deploy to kubernetes'){
             steps{
                 script{
                     withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'k8s', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {                       sh 'kubectl apply -f deployment.yaml'
