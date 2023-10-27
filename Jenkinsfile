@@ -52,7 +52,8 @@ pipeline{
         stage('Build docker image'){
             steps{
                 script{
-                    sh 'docker build -t nelzone/2048v2 .'
+                    sh 'docker rmi nelzone/2048'
+                    sh 'docker build -t nelzone/2048 .'
                 }
             }
         }
@@ -73,7 +74,7 @@ pipeline{
         }
         stage('Deploy to container'){
             steps{
-                sh 'docker run -d --name 2048v2 -p 3000:3000 nelzone/2048:latest2'
+                sh 'docker run -d --name 2048 -p 3000:3000 nelzone/2048:latest'
             }
         }
         stage('Deploy to kubernetes'){
